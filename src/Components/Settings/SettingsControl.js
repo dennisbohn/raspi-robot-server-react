@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./SettingsControl.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useSocket } from "../../Providers/SocketProvider";
+import {
+  useConfiguration,
+  useSetConfiguration,
+  useSaveConfiguration,
+} from "../../Providers/ConfigurationProvider";
 
-var configuration = {};
-const buttons = {
+const keys = {
   upleft: "Oben + Links",
   up: "Oben",
   upright: "Oben + Rechts",
@@ -117,23 +120,17 @@ const pins = [
 ];
 
 export default function SettingsControl() {
-  const socket = useSocket();
+  const configuration = useConfiguration();
+  const setConfiguration = useSetConfiguration();
+  const saveConfiguration = useSaveConfiguration();
 
   const [pinlist, setPinlist] = React.useState([]);
-  const [activeButton, setActiveButton] = React.useState(null);
+  const [activeKey, setActiveKey] = React.useState(null);
 
-  useEffect(() => {
-    socket.emit("getConfiguration", (serverConfig) => {
-      configuration = serverConfig;
-    });
-  }, [socket]);
-
-  const changeActiveButton = (e) => {
+  const changeActiveKey = (e) => {
     const key = e.target.value;
-    setActiveButton(key);
-    if (!configuration.pinlist) configuration.pinlist = {};
-    if (!configuration.pinlist[key]) configuration.pinlist[key] = [];
-    if (key) {
+    setActiveKey(key);
+    if (key && configuration.pinlist && configuration.pinlist[key]) {
       setPinlist(configuration.pinlist[key]);
     } else {
       setPinlist([]);
@@ -171,8 +168,9 @@ export default function SettingsControl() {
 
   const updatePinlist = (pinlist) => {
     setPinlist(pinlist);
-    configuration.pinlist[activeButton] = pinlist;
-    socket.emit("updateConfiguration", configuration);
+    if (!configuration.pinlist) configuration.pinlist = {};
+    configuration.pinlist[activeKey] = pinlist;
+    setConfiguration(configuration);
   };
 
   const addPin = () => {
@@ -189,7 +187,7 @@ export default function SettingsControl() {
 
   const saveControlConfig = (e) => {
     e.target.disabled = true;
-    socket.emit("saveConfiguration", (res) => {
+    saveConfiguration((res) => {
       if (res) e.target.disabled = false;
     });
   };
@@ -199,16 +197,16 @@ export default function SettingsControl() {
       <h3>Steuerung</h3>
       <div className="box">
         <h4>Taste</h4>
-        <select onChange={changeActiveButton}>
+        <select onChange={changeActiveKey}>
           <option value="">--- Taste wählen ---</option>
-          {Object.entries(buttons).map((value) => (
+          {Object.entries(keys).map((value) => (
             <option key={value[0]} value={value[0]}>
               {value[1]}
             </option>
           ))}
         </select>
       </div>
-      {activeButton && (
+      {activeKey && (
         <>
           <FontAwesomeIcon icon={faChevronDown} color="#000" />
           <div className="box">

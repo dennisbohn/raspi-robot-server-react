@@ -1,14 +1,14 @@
 import React from "react";
 
 const SettingsVisibleContext = React.createContext();
-const SettingsSetVisibleContext = React.createContext();
+const SetSettingsVisibleContext = React.createContext();
 
 export function useSettingsVisible() {
   return React.useContext(SettingsVisibleContext);
 }
 
 export function useSetSettingsVisible() {
-  return React.useContext(SettingsSetVisibleContext);
+  return React.useContext(SetSettingsVisibleContext);
 }
 
 export default function SettingsVisibleProvider({ children }) {
@@ -16,9 +16,9 @@ export default function SettingsVisibleProvider({ children }) {
 
   return (
     <SettingsVisibleContext.Provider value={visible}>
-      <SettingsSetVisibleContext.Provider value={setVisible}>
+      <SetSettingsVisibleContext.Provider value={setVisible}>
         {children}
-      </SettingsSetVisibleContext.Provider>
+      </SetSettingsVisibleContext.Provider>
     </SettingsVisibleContext.Provider>
   );
 }
