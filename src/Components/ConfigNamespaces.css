@@ -1,0 +1,15 @@
+.ConfigNamespaces ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.ConfigNamespaces span {
+  background: #03c;
+  color: #fff;
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+}

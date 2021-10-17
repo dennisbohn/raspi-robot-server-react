@@ -1,0 +1,12 @@
+.Video {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  transition: width 0.3s;
+}
+
+.Video.settingsVisible {
+  width: calc(100% - 400px);
+}

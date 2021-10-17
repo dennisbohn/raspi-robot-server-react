@@ -52,7 +52,7 @@ class Video extends Component {
   generatePlayer() {
     this.player = new window.Player({
       size: {
-        width: 1280,
+        width: 960,
         height: 720,
       },
     });

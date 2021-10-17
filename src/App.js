@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from "react";
-import io from "socket.io-client";
-import Video from "./Components/Video";
+import Video from "./Components/Video/Video";
+import SettingsOverlay from "./Components/Settings/SettingsOverlay";
+import OpenSettingsButton from "./Components/Settings/OpenSettingsButton";
 import "./App.css";
+import Provider from "./Providers/Provider";
 
 function App() {
-  const [socket, setSocket] = useState(null);
-
-  useEffect(() => {
-    const newSocket = io("http://localhost:3001/uturm");
-    setSocket(newSocket);
-    return () => newSocket.close();
-  }, []);
-
   return (
-    <div className="App">
-      <Video socket={socket} />
-    </div>
+    <Provider>
+      <Video></Video>
+      <SettingsOverlay></SettingsOverlay>
+      <OpenSettingsButton></OpenSettingsButton>
+    </Provider>
   );
 }
 
